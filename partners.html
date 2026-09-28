@@ -1,0 +1,487 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>유니온원 파트너스 가입 신청</title>
+
+<!-- 다음(카카오) 우편번호 서비스 -->
+<script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
+
+<style>
+  :root{
+    --blue: #1E6FD9;
+    --blue-dark: #1655AE;
+    --line: #d8dde5;
+    --text: #222;
+    --muted: #8a929e;
+  }
+  * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+  html, body {
+    margin: 0; padding: 0;
+    background: #eef1f5;
+    font-family: "Malgun Gothic", "맑은 고딕", -apple-system, BlinkMacSystemFont, "Apple SD Gothic Neo", sans-serif;
+    color: var(--text);
+    -webkit-text-size-adjust: 100%;
+  }
+  .wrap {
+    max-width: 480px;
+    margin: 0 auto;
+    background: #ffffff;
+    min-height: 100vh;
+  }
+
+  /* ===== 상단 로고 ===== */
+  /* 로고 이미지: 아래 <img>의 src에 파일명을 넣으세요 (예: logo.png)
+     권장: 가로 600px 이내, 배경 투명 또는 흰색 PNG */
+  .logo-area {
+    text-align: center;
+    padding: 22px 16px 18px;
+    border-bottom: 1px solid var(--line);
+  }
+  .logo-area img { max-width: 60%; max-height: 56px; height: auto; }
+
+  /* ===== 제목 ===== */
+  .page-title {
+    text-align: center;
+    padding: 20px 16px 6px;
+  }
+  .page-title h1 { font-size: 20px; margin: 0 0 6px; }
+  .page-title p { font-size: 13px; color: var(--muted); margin: 0; }
+
+  /* ===== 본문 ===== */
+  .content { padding: 10px 16px 40px; }
+
+  .section { margin-top: 22px; }
+  .section-title {
+    font-size: 15px;
+    font-weight: 700;
+    padding-bottom: 8px;
+    margin-bottom: 14px;
+    border-bottom: 2px solid var(--blue);
+    color: var(--blue-dark);
+  }
+
+  .field { margin-bottom: 14px; }
+  .field > label.lbl {
+    display: block;
+    font-size: 13px;
+    font-weight: 600;
+    margin-bottom: 6px;
+  }
+  .req { color: #e11d1d; margin-left: 2px; }
+  .hint { font-size: 11.5px; color: var(--muted); margin-top: 5px; }
+
+  input[type="text"],
+  input[type="tel"],
+  input[type="email"],
+  input[type="number"] {
+    width: 100%;
+    height: 46px;
+    border: 1px solid var(--line);
+    border-radius: 8px;
+    padding: 0 12px;
+    font-size: 15px;
+    background: #fff;
+    color: var(--text);
+    outline: none;
+  }
+  input:focus { border-color: var(--blue); }
+  input::placeholder { color: #b7bdc7; }
+  input[readonly] { background: #f2f4f7; color: #666; }
+
+  /* 우편번호 검색 */
+  .zip-group { display: flex; gap: 6px; margin-bottom: 8px; }
+  .zip-group input { flex: 1 1 auto; }
+  .btn-search {
+    flex: 0 0 auto;
+    border: none;
+    background: var(--blue);
+    color: #fff;
+    font-weight: 600;
+    font-size: 14px;
+    border-radius: 8px;
+    padding: 0 18px;
+    height: 46px;
+    cursor: pointer;
+  }
+  .btn-search:active { background: var(--blue-dark); }
+
+  /* 파일 업로드 */
+  .file-box {
+    border: 1px dashed var(--line);
+    border-radius: 8px;
+    padding: 16px;
+    text-align: center;
+  }
+  .file-box input[type="file"] { display: none; }
+  .file-btn {
+    display: inline-block;
+    background: #eef4fd;
+    color: var(--blue-dark);
+    border: 1px solid #cddffb;
+    border-radius: 8px;
+    padding: 10px 18px;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+  }
+  .file-name { display: block; margin-top: 10px; font-size: 13px; color: #444; word-break: break-all; }
+  .file-preview { margin-top: 12px; max-width: 100%; max-height: 220px; border-radius: 8px; display: none; }
+
+  /* 체크박스(공사 가능 범위) */
+  .checks { display: flex; flex-wrap: wrap; gap: 8px; }
+  .check-item {
+    display: flex; align-items: center;
+    border: 1px solid var(--line);
+    border-radius: 8px;
+    padding: 10px 14px;
+    font-size: 14px; cursor: pointer; user-select: none;
+  }
+  .check-item input { margin: 0 8px 0 0; width: 18px; height: 18px; accent-color: var(--blue); }
+  .check-item.on { border-color: var(--blue); background: #eef4fd; }
+
+  /* 약관 동의 */
+  .agree-block { margin-top: 8px; }
+  .agree-row {
+    display: flex; align-items: center; gap: 8px;
+    padding: 12px 0; border-bottom: 1px solid #eef0f3;
+    font-size: 14px;
+  }
+  .agree-row input { width: 19px; height: 19px; accent-color: var(--blue); flex: 0 0 auto; }
+  .agree-row .view {
+    margin-left: auto; font-size: 12px; color: var(--muted);
+    text-decoration: underline; cursor: pointer; background: none; border: none;
+  }
+  .terms-text {
+    display: none;
+    background: #f7f9fc; border: 1px solid var(--line); border-radius: 8px;
+    padding: 12px; font-size: 12px; color: #555; line-height: 1.7; margin-top: 8px;
+    max-height: 160px; overflow-y: auto; white-space: pre-line;
+  }
+
+  /* 제출 버튼 */
+  .btn-submit {
+    width: 100%; height: 54px; margin-top: 26px;
+    border: none; border-radius: 10px;
+    background: var(--blue); color: #fff;
+    font-size: 17px; font-weight: 700; cursor: pointer;
+  }
+  .btn-submit:active { background: var(--blue-dark); }
+  .btn-submit:disabled { background: #b9c4d4; cursor: not-allowed; }
+
+  /* 완료 화면 */
+  .done { display: none; text-align: center; padding: 70px 24px; }
+  .done .check {
+    width: 72px; height: 72px; border-radius: 50%;
+    background: var(--blue); color: #fff; font-size: 38px;
+    line-height: 72px; margin: 0 auto 20px;
+  }
+  .done h2 { font-size: 21px; margin: 0 0 10px; }
+  .done p { color: #666; font-size: 14px; line-height: 1.7; margin: 0; }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <!-- ===== 상단 로고 ===== -->
+  <div class="logo-area">
+    <!-- 로고 이미지: src="logo.png" 의 파일명만 바꾸면 됩니다 -->
+    <img src="logo.png" alt="유니온원">
+  </div>
+
+  <div class="page-title">
+    <h1>파트너스 가입 신청</h1>
+    <p>유니온원과 함께할 파트너를 모집합니다</p>
+  </div>
+
+  <!-- ===== 신청 폼 ===== -->
+  <div class="content" id="formArea">
+    <form id="applyForm" autocomplete="off">
+
+      <!-- 사업자 정보 -->
+      <div class="section">
+        <div class="section-title">사업자 정보</div>
+
+        <div class="field">
+          <label class="lbl" for="company">회사명 (상호)<span class="req">*</span></label>
+          <input type="text" id="company" required>
+        </div>
+
+        <div class="field">
+          <label class="lbl" for="ceo">대표자명<span class="req">*</span></label>
+          <input type="text" id="ceo" required>
+        </div>
+
+        <div class="field">
+          <label class="lbl" for="bizno">사업자번호<span class="req">*</span></label>
+          <input type="tel" id="bizno" inputmode="numeric" maxlength="12" placeholder="000-00-00000" required>
+        </div>
+
+        <div class="field">
+          <label class="lbl" for="phone">연락처<span class="req">*</span></label>
+          <input type="tel" id="phone" inputmode="numeric" maxlength="13" placeholder="010-0000-0000" required>
+        </div>
+
+        <div class="field">
+          <label class="lbl" for="email">이메일<span class="req">*</span></label>
+          <input type="email" id="email" placeholder="example@email.com" required>
+        </div>
+
+        <div class="field">
+          <label class="lbl">사업장 주소<span class="req">*</span></label>
+          <div class="zip-group">
+            <input type="text" id="zipcode" readonly placeholder="우편번호">
+            <button type="button" class="btn-search" onclick="openPostcode()">주소검색</button>
+          </div>
+          <input type="text" id="address" readonly placeholder="주소" style="margin-bottom:8px;">
+          <input type="text" id="addressDetail" placeholder="상세주소">
+        </div>
+
+        <div class="field">
+          <label class="lbl">사업자 등록증<span class="req">*</span></label>
+          <div class="file-box">
+            <label class="file-btn" for="bizFile">파일 선택 / 사진 촬영</label>
+            <input type="file" id="bizFile" accept="image/*,.pdf" capture="environment">
+            <span class="file-name" id="fileName">선택된 파일 없음</span>
+            <img id="filePreview" class="file-preview" alt="미리보기">
+          </div>
+          <div class="hint">이미지(JPG/PNG) 또는 PDF · 사진은 자동으로 용량이 줄어 업로드됩니다</div>
+        </div>
+      </div>
+
+      <!-- 추가 정보 -->
+      <div class="section">
+        <div class="section-title">추가 정보 입력 <span style="font-weight:400;font-size:12px;color:var(--muted);">(선택)</span></div>
+
+        <div class="field">
+          <label class="lbl">공사 가능 범위</label>
+          <div class="checks">
+            <label class="check-item"><input type="checkbox" name="scope" value="철거">철거</label>
+            <label class="check-item"><input type="checkbox" name="scope" value="원상복구">원상복구</label>
+            <label class="check-item"><input type="checkbox" name="scope" value="폐기물처리">폐기물처리</label>
+            <label class="check-item"><input type="checkbox" name="scope" value="리모델링">리모델링</label>
+            <label class="check-item"><input type="checkbox" name="scope" value="기타">기타</label>
+          </div>
+        </div>
+
+        <div class="field">
+          <label class="lbl" for="returnRate">희망리턴</label>
+          <input type="text" id="returnRate" placeholder="예: 10%">
+        </div>
+
+        <div class="field">
+          <label class="lbl" for="region">활동 가능 지역</label>
+          <input type="text" id="region" placeholder="예: 대구, 경북">
+        </div>
+
+        <div class="field">
+          <label class="lbl" for="minAmount">최소 공사 가능 금액</label>
+          <input type="text" id="minAmount" inputmode="numeric" placeholder="예: 500,000원">
+        </div>
+      </div>
+
+      <!-- 약관 동의 -->
+      <div class="section">
+        <div class="section-title">약관 동의</div>
+        <div class="agree-block">
+          <div class="agree-row">
+            <input type="checkbox" id="agree1">
+            <label for="agree1">[필수] 이용약관에 동의합니다</label>
+            <button type="button" class="view" onclick="toggleTerms('terms1')">보기</button>
+          </div>
+          <div class="terms-text" id="terms1">유니온원 파트너스 이용약관
+
+제1조(목적) 본 약관은 유니온원(이하 "회사")이 제공하는 파트너스 서비스의 이용과 관련하여 회사와 파트너 간의 권리·의무 및 책임사항을 규정함을 목적으로 합니다.
+제2조(파트너 신청) 파트너 가입을 희망하는 자는 본 신청서에 사실에 근거한 정보를 기재하여 제출하며, 회사는 심사 후 승인 여부를 통지합니다.
+제3조(의무) 파트너는 관련 법령 및 회사의 정책을 준수하며, 공사 수행 시 성실히 임합니다.</div>
+
+          <div class="agree-row">
+            <input type="checkbox" id="agree2">
+            <label for="agree2">[필수] 개인정보 수집 및 이용에 동의합니다</label>
+            <button type="button" class="view" onclick="toggleTerms('terms2')">보기</button>
+          </div>
+          <div class="terms-text" id="terms2">개인정보 수집 및 이용 안내
+
+1. 수집 항목: 회사명, 대표자명, 사업자번호, 연락처, 이메일, 사업장 주소, 사업자등록증
+2. 수집 목적: 파트너 가입 심사 및 업무 연락, 계약 체결
+3. 보유 기간: 계약 종료 후 관계 법령에 따른 기간까지
+※ 동의를 거부할 권리가 있으나, 미동의 시 파트너 가입이 제한될 수 있습니다.</div>
+        </div>
+      </div>
+
+      <button type="submit" class="btn-submit" id="submitBtn">가입 요청하기</button>
+    </form>
+  </div>
+
+  <!-- ===== 완료 화면 ===== -->
+  <div class="done" id="doneArea">
+    <div class="check">✓</div>
+    <h2>가입 신청이 완료되었습니다</h2>
+    <p>제출해 주셔서 감사합니다.<br>심사 후 담당자가 연락드리겠습니다.</p>
+  </div>
+
+</div>
+
+<script>
+  // ★ Apps Script 배포 후 나오는 웹앱 URL을 여기에 넣으면 연결 완료됩니다.
+  //    (배포 URL을 알려주시면 채워서 최종본으로 드립니다)
+  const GAS_URL = "PUT_YOUR_APPS_SCRIPT_WEBAPP_URL_HERE";
+
+  var fileBase64 = "", fileName = "", fileType = "";
+
+  // 주소 검색
+  function openPostcode() {
+    new daum.Postcode({
+      oncomplete: function(data){
+        document.getElementById('zipcode').value = data.zonecode;
+        document.getElementById('address').value = data.roadAddress || data.jibunAddress;
+        document.getElementById('addressDetail').focus();
+      }
+    }).open();
+  }
+
+  // 약관 보기 토글
+  function toggleTerms(id){
+    var el = document.getElementById(id);
+    el.style.display = (el.style.display === 'block') ? 'none' : 'block';
+  }
+
+  // 사업자번호 자동 하이픈 (000-00-00000)
+  document.getElementById('bizno').addEventListener('input', function(e){
+    var v = e.target.value.replace(/[^0-9]/g,'').slice(0,10);
+    var out = v;
+    if (v.length > 5) out = v.slice(0,3)+'-'+v.slice(3,5)+'-'+v.slice(5);
+    else if (v.length > 3) out = v.slice(0,3)+'-'+v.slice(3);
+    e.target.value = out;
+  });
+
+  // 연락처 자동 하이픈
+  document.getElementById('phone').addEventListener('input', function(e){
+    var v = e.target.value.replace(/[^0-9]/g,'').slice(0,11);
+    var out = v;
+    if (v.length > 7) out = v.slice(0,3)+'-'+v.slice(3,7)+'-'+v.slice(7);
+    else if (v.length > 3) out = v.slice(0,3)+'-'+v.slice(3);
+    e.target.value = out;
+  });
+
+  // 공사범위 체크 강조
+  document.querySelectorAll('.check-item input').forEach(function(cb){
+    cb.addEventListener('change', function(){
+      this.closest('.check-item').classList.toggle('on', this.checked);
+    });
+  });
+
+  // 파일 선택 → 이미지면 자동 압축, PDF면 원본
+  document.getElementById('bizFile').addEventListener('change', function(e){
+    var f = e.target.files[0];
+    var preview = document.getElementById('filePreview');
+    if (!f) { document.getElementById('fileName').textContent = '선택된 파일 없음'; preview.style.display='none'; return; }
+    document.getElementById('fileName').textContent = f.name;
+
+    if (f.type.indexOf('image/') === 0) {
+      var reader = new FileReader();
+      reader.onload = function(ev){
+        var img = new Image();
+        img.onload = function(){
+          var max = 1600, w = img.width, h = img.height;
+          if (w > max || h > max) {
+            if (w >= h) { h = Math.round(h * max / w); w = max; }
+            else { w = Math.round(w * max / h); h = max; }
+          }
+          var canvas = document.createElement('canvas');
+          canvas.width = w; canvas.height = h;
+          canvas.getContext('2d').drawImage(img, 0, 0, w, h);
+          var dataUrl = canvas.toDataURL('image/jpeg', 0.85);
+          fileBase64 = dataUrl.split(',')[1];
+          fileType = 'image/jpeg';
+          fileName = (f.name.replace(/\.[^.]+$/,'') || 'file') + '.jpg';
+          preview.src = dataUrl; preview.style.display = 'block';
+        };
+        img.src = ev.target.result;
+      };
+      reader.readAsDataURL(f);
+    } else {
+      // PDF 등 원본
+      var r2 = new FileReader();
+      r2.onload = function(ev){
+        fileBase64 = ev.target.result.split(',')[1];
+        fileType = f.type || 'application/octet-stream';
+        fileName = f.name;
+      };
+      r2.readAsDataURL(f);
+      preview.style.display = 'none';
+    }
+  });
+
+  // 제출
+  document.getElementById('applyForm').addEventListener('submit', function(e){
+    e.preventDefault();
+
+    var company = document.getElementById('company').value.trim();
+    var ceo = document.getElementById('ceo').value.trim();
+    var bizno = document.getElementById('bizno').value.trim();
+    var phone = document.getElementById('phone').value.trim();
+    var email = document.getElementById('email').value.trim();
+    var zip = document.getElementById('zipcode').value.trim();
+    var addr = document.getElementById('address').value.trim();
+    var addrD = document.getElementById('addressDetail').value.trim();
+
+    if (!company) { alert('회사명을 입력해 주세요.'); return; }
+    if (!ceo) { alert('대표자명을 입력해 주세요.'); return; }
+    if (!bizno) { alert('사업자번호를 입력해 주세요.'); return; }
+    if (!phone) { alert('연락처를 입력해 주세요.'); return; }
+    if (!email) { alert('이메일을 입력해 주세요.'); return; }
+    if (!addr) { alert('사업장 주소를 입력해 주세요.'); return; }
+    if (!fileBase64) { alert('사업자 등록증을 첨부해 주세요.'); return; }
+    if (!document.getElementById('agree1').checked || !document.getElementById('agree2').checked) {
+      alert('필수 약관에 모두 동의해 주세요.'); return;
+    }
+
+    var scope = Array.prototype.map.call(
+      document.querySelectorAll('input[name="scope"]:checked'),
+      function(el){ return el.value; }
+    ).join(', ');
+
+    var fullAddr = (zip ? '('+zip+') ' : '') + addr + (addrD ? ' ' + addrD : '');
+
+    var params = new URLSearchParams();
+    params.append('company',   company);
+    params.append('ceo',       ceo);
+    params.append('bizno',     bizno);
+    params.append('phone',     phone);
+    params.append('email',     email);
+    params.append('address',   fullAddr);
+    params.append('scope',     scope);
+    params.append('returnRate',document.getElementById('returnRate').value.trim());
+    params.append('region',    document.getElementById('region').value.trim());
+    params.append('minAmount', document.getElementById('minAmount').value.trim());
+    params.append('agree',     '동의');
+    params.append('fileData',  fileBase64);
+    params.append('fileName',  fileName);
+    params.append('fileType',  fileType);
+
+    var btn = document.getElementById('submitBtn');
+    btn.disabled = true;
+    btn.textContent = '전송 중...';
+
+    fetch(GAS_URL, {
+      method: 'POST',
+      mode: 'no-cors',
+      headers: { 'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8' },
+      body: params.toString()
+    })
+    .then(function(){
+      document.getElementById('formArea').style.display = 'none';
+      document.getElementById('doneArea').style.display = 'block';
+      window.scrollTo(0,0);
+    })
+    .catch(function(){
+      alert('전송 중 오류가 발생했습니다. 잠시 후 다시 시도해 주세요.');
+      btn.disabled = false;
+      btn.textContent = '가입 요청하기';
+    });
+  });
+</script>
+</body>
+</html>
