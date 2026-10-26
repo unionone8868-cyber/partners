@@ -465,6 +465,26 @@
     btn.disabled = true;
     btn.textContent = '전송 중...';
 
+    // 워크보드(업무 현황판) 문의 접수함에도 함께 저장 (사업자등록증 파일은 기존처럼 구글로만 전송)
+    try {
+      var BK = 'sb_publishable_WXbAHGbo9QrRDtSO8LmXnA_UiapON2B';
+      fetch('https://ysjwrnblpxpjozanhior.supabase.co/rest/v1/inquiries', {
+        method: 'POST', keepalive: true,
+        headers: { apikey: BK, 'Content-Type': 'application/json', Prefer: 'return=minimal' },
+        body: JSON.stringify({
+          kind: '파트너스', name: ceo.slice(0, 50), phone: phone.slice(0, 20), category: company.slice(0, 60),
+          address: fullAddr.slice(0, 200), message: '', source: '파트너스 신청 페이지',
+          extra: {
+            '사업자번호': bizno, '이메일': email, '공사 가능 범위': scope,
+            '희망리턴': document.getElementById('returnRate').value.trim(),
+            '활동 가능 지역': document.getElementById('region').value.trim(),
+            '최소 공사 가능 금액': document.getElementById('minAmount').value.trim(),
+            '사업자 등록증': '기존 접수(구글 시트·메일)에서 확인'
+          }
+        })
+      }).catch(function(){});
+    } catch (x) {}
+
     fetch(GAS_URL, {
       method: 'POST',
       mode: 'no-cors',
